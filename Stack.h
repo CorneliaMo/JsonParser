@@ -1,6 +1,7 @@
 #ifndef STACK_H
 #define STACK_H
 #include "status_code.h"
+#include <cstddef>
 
 template<class T>
 class Stack{
@@ -14,7 +15,7 @@ class Stack{
     public:
         Stack(int _size=50);
         int push(T data); 
-        int pop(T* result);         //result contain poped data
+        int pop(T* &result);         //result contain poped data
         int getSize();              //return size of stack
         int getLength();            //return length of stack
         int setSizeincrement(int i); //return current size_increment

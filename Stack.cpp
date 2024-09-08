@@ -9,19 +9,18 @@ Stack<T>::Stack(int _size){
 }
 
 template<typename T>
-int Stack<T>::pop(T* result){
-    if (top==nullptr){
+int Stack<T>::pop(T* &result){
+    if (top==NULL){
         //Memory error
-        result == nullptr;
+        result == NULL;
         return ERROR;
     }else if(top==bottom){
         //reach the bottom
-        //clear the memory
+        //reset the memory
         T* tmp = new T;
         *tmp = *top;
-        delete[] bottom;
-        top = bottom =nullptr;
-        size = length = 0;
+        top = NULL;
+        length = 0;
         result = tmp;
         return OK;
     }else{
@@ -61,11 +60,15 @@ int Stack<T>::mem_increase(){
 
 template<typename T>
 int Stack<T>::push(T data){
-    if (size==length){
+    if (size==length&&length!=0){
         //memory is full
         mem_increase();        
     }
-    top++;
+    if (length==0||top==NULL){
+        top = bottom;
+    }else{
+        top++;
+    }
     *top = data;
     length++;
     return OK;
@@ -89,14 +92,14 @@ int Stack<T>::setSizeincrement(int i){
 
 template<typename T>
 Stack<T>::~Stack(){
-    if (bottom!=nullptr){
+    if (bottom!=NULL){
         delete[] bottom;
     }
 }
 
 template<typename T>
 int Stack<T>::emptyStack(){
-    if (bottom!=nullptr){
+    if (bottom!=NULL){
         delete[] bottom;
     }
     bottom = top = new T[size_increment];
