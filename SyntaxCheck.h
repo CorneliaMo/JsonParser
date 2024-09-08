@@ -1,9 +1,10 @@
-#ifndef SYSTAXCHECK_H
-#define SYSTAXCHECK_H
+#ifndef SYNTAXCHECK_H
+#define SYNTAXCHECK_H
 
-#include "Stack.h"
 #include "status_code.h"
-#include <string>
+#include "Stack.h"
+#include <string>e
+#include  "Stack.cpp"           //不知为何，在同时使用模板类和头文件分离时，需要include对应cpp文件
 
 typedef struct SymbolCount
 {
@@ -21,4 +22,4 @@ class SyntaxCheck {
         int emptyStacks();
 };
 
-#endif //SYSTAXCHECK_H
+#endif //SYNTAXCHECK_H

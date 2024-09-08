@@ -4,6 +4,7 @@ template<typename T>
 Stack<T>::Stack(int _size){
 	size = _size;
     length = 0;
+    size_increment = 20;
     top = bottom = new T[size];
 }
 
@@ -12,22 +13,24 @@ int Stack<T>::pop(T* result){
     if (top==nullptr){
         //Memory error
         result == nullptr;
-        return nullptr;
+        return ERROR;
     }else if(top==bottom){
         //reach the bottom
         //clear the memory
-        T tmp = *top;
+        T* tmp = new T;
+        *tmp = *top;
         delete[] bottom;
         top = bottom =nullptr;
         size = length = 0;
-        *result = tmp;
+        result = tmp;
         return OK;
     }else{
         //default situation
-        T tmp = *top;
+        T* tmp = new T;
+        *tmp = *top;
         length--;
         top--;
-        *result = tmp;
+        result = tmp;
         return OK;
     }
 }
@@ -57,7 +60,7 @@ int Stack<T>::mem_increase(){
 }
 
 template<typename T>
-T* Stack<T>::push(T data){
+int Stack<T>::push(T data){
     if (size==length){
         //memory is full
         mem_increase();        
@@ -65,7 +68,7 @@ T* Stack<T>::push(T data){
     top++;
     *top = data;
     length++;
-    return top;
+    return OK;
 }
 
 template<typename T>
