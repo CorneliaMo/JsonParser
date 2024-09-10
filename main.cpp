@@ -1,5 +1,5 @@
 #include <iostream>
-#include "SyntaxCheck.h"
+#include "JsonAnalyze.h"
 
 int main(){
     std::cout << "Tester for JsonParser by CorneliaMo\n";
@@ -7,8 +7,9 @@ int main(){
     std::string json;
     std::cin >> json;
     std::cout << std::endl;
-    SyntaxCheck syntaxChecker = SyntaxCheck();
-    int re = syntaxChecker.checkSyntax(json);
-    std::cout << (re==OK ? "Syntax is right." : "Syntax is wrong.") << std::endl;
+    JsonAnalyze analyze;
+    if (analyze.Analyze(json)!=OK){
+        std::cout << "Analyze error";
+    }
     return 0;
 }

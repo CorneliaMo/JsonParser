@@ -4,7 +4,7 @@
 #include "status_code.h"
 #include "Stack.h"
 #include <string>
-#include  "Stack.cpp"           //不知为何，在同时使用模板类和头文件分离时，需要include对应cpp文件
+//#include  "Stack.cpp"           //不知为何，在同时使用模板类和头文件分离时，需要include对应cpp文件
 
 typedef struct SymbolCount
 {
