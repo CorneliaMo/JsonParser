@@ -1,5 +1,39 @@
 #include <iostream>
 #include "JsonAnalyze.h"
+#include "status_code.h"
+
+void outputData(Data &data){
+    //Data can be int, double, true, false, string, null, object, array
+    if (data.type=="string"){
+        std::cout << *(std::string*)(data.data);
+    }else if (data.type=="double"){
+        std::cout << *(double*)(data.data);
+    }else if (data.type=="int"){
+        std::cout << *(int*)(data.data);
+    }else if (data.type=="bool"){
+        std::cout << *(bool*)(data.data);
+    }else if (data.type=="null"){
+        std::cout << "NULL";
+    }else if (data.type=="object"){
+        std::cout << "(object_ptr)";
+    }else if (data.type=="array"){
+        std::cout << "(array_ptr)";
+    }
+}
+
+void outputDataContainer(DataContainer* container){
+    if (container->isArray()){
+        //is array
+    }else if (container->isObject()){
+        std::string* key_lists = container->getListOfKeys();
+        for (int loop=0;loop<container->getLength();loop++){
+            Data result = container->getObjectByKey(key_lists[loop]);
+            std::cout << "Key: " << key_lists[loop] << ", type: " << result.type << ", value: ";
+            outputData(result);
+            std::cout << std::endl;
+        }
+    }
+}
 
 int main(){
     std::cout << "Tester for JsonParser by CorneliaMo\n";
@@ -7,20 +41,19 @@ int main(){
     std::string json;
     std::cin >> json;
     std::cout << std::endl;
-    SyntaxCheck checker;
-    if (checker.checkSyntax(json)!=OK){
-        std::cout << "Syntax wrong!\n";
+    JsonAnalyze analyze;
+    int re = analyze.AnalyzeString(json);
+    if (re == WRONG){
+        std::cout << "Analyze error!\n\n";
+    }else if (re == ERROR){
+        std::cout << "Analyze error!\n\n";
     }else{
-        JsonAnalyze analyze;
-        if (analyze.Analyze(json)!=OK){
-            std::cout << "Analyze error!\n";
+        DataContainer* result = analyze.successAnalyze();
+        if (result!=NULL){
+            std::cout << "Analyze success!\n\n";
+            outputDataContainer(result);
         }else{
-            DataContainer* result = analyze.successAnalyze();
-            if (result==NULL){
-                std::cout << "Analyze error!\n";
-            }else{
-                std::cout << "Analyze success!\n";
-            }
+            std::cout << "Analyze error!\n\n";
         }
     }
     return 0;

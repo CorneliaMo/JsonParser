@@ -14,7 +14,7 @@ std::string JsonAnalyze::getKey(std::string json, int i){
         index++;
     }
     #ifdef DEBUG
-    std::cout << "Find key "" << key << ""\n"; 
+    std::cout << "Find key \"" << key << "\"\n"; 
     #endif
     return key;
 }
@@ -183,7 +183,7 @@ int JsonAnalyze::Analyze(std::string json){
                     int re = datacontainerStack.pop(tmpPtr);
                     if (re!=OK||tmpPtr==NULL) return ERROR;
                     pContainer->values[added].data = *tmpPtr;
-                    pContainer->values[added].type = json[nowIndex]=='{'? "Object" : "Array";
+                    pContainer->values[added].type = json[nowIndex]=='{'? "object" : "array";
                     delete tmpPtr;
                     //set new index
                     tmp_cal_length = 0;
@@ -199,6 +199,7 @@ int JsonAnalyze::Analyze(std::string json){
                             break;
                         }
                     }
+                    added++;
                 }else{
                     //the value is int, double, string, bool or null
                     int value_end = nowIndex;
@@ -208,7 +209,8 @@ int JsonAnalyze::Analyze(std::string json){
                     int re = convertToData(json.substr(nowIndex, value_end-nowIndex+1), pContainer->values[added]);
                     if (re!=OK) return ERROR;
                     //set new index
-                    nowIndex = value_end+1;
+                    nowIndex = value_end+2;
+                    added++;
                 }
             }//finish add object's elements
         }else{
@@ -224,6 +226,7 @@ int JsonAnalyze::Analyze(std::string json){
                 if (re!=OK) return ERROR;
                 //set new index
                 nowIndex = value_end+1;
+                added++;
             }
         }
     }else{
@@ -244,4 +247,11 @@ DataContainer* JsonAnalyze::successAnalyze(){
     }else{
         return NULL;
     }
+}
+
+int JsonAnalyze::AnalyzeString(std::string json){
+    SyntaxCheck checker;
+    if (checker.checkSyntax(json)!=OK) return WRONG;
+    if (Analyze(json)!=OK) return ERROR;
+    return OK;
 }

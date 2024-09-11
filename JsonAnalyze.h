@@ -16,9 +16,10 @@ class JsonAnalyze{
         int convertToData(std::string sep_json, Data &data);
         std::string clearSpace(std::string string);
         bool isNumber(std::string string);
+        int Analyze(std::string json);
     public:
         JsonAnalyze();
-        int Analyze(std::string json);
+        int AnalyzeString(std::string json);
         DataContainer* successAnalyze();
 };
 
