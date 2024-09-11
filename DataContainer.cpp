@@ -1,14 +1,7 @@
 #include "DataContainer.h"
 
-DataContainer::DataContainer(int _length, char _type){
-    length = _length;
-    type = _type;
-    if (type=='O'){
-        keys = new std::string[length];
-    }else{
-        keys = NULL;
-    }    
-    values = new Data[length];
+DataContainer::DataContainer(){
+
 }
 
 Data DataContainer::getNullData(){
@@ -28,24 +21,6 @@ bool DataContainer::isArray(){
 
 int DataContainer::getLength(){
     return length;
-}
-
-std::string* DataContainer::getPointerToKeys(){
-    return keys;
-}
-
-Data* DataContainer::getPointerToValues(){
-    return values;
-}
-
-void DataContainer::setLength(int _length){
-    length = _length;
-}
-
-void DataContainer::setType(char _type){
-    if (_type=='O'||_type=='A'){
-        type = _type;
-    }
 }
 
 Data DataContainer::getArrayByIndex(int i){

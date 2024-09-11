@@ -5,17 +5,21 @@
 #include "Stack.h"
 #include "DataContainer.h"
 #include "SyntaxCheck.h"
+#include <sstream>
 
 class JsonAnalyze{
     private:
-        Stack<Data> dataStack;
-        Data mainTree;
+        Stack<DataContainer*> datacontainerStack;
+        DataContainer* mainContainer;
         short success;
-        int findEndSymbol(std::string json, int i);
+        std::string getKey(std::string json, int i);
+        int convertToData(std::string sep_json, Data &data);
+        std::string clearSpace(std::string string);
+        bool isNumber(std::string string);
     public:
         JsonAnalyze();
         int Analyze(std::string json);
-        int isSuccess();
+        DataContainer* successAnalyze();
 };
 
 #endif

@@ -21,12 +21,8 @@ class DataContainer {
         char type;      //'O' for object, 'A' for array
         friend class JsonAnalyze;
         Data getNullData();
-        Data* getPointerToValues();
-        std::string* getPointerToKeys();
-        void setLength(int _length);
-        void setType(char _type);
     public:
-        DataContainer(int _length, char _type);
+        DataContainer();
         bool isObject();
         bool isArray();
         int getLength();
