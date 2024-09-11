@@ -24,6 +24,13 @@ void outputData(Data &data){
 void outputDataContainer(DataContainer* container){
     if (container->isArray()){
         //is array
+        int length = container->getLength();
+        for (int loop=0;loop<length;loop++){
+            Data result = container->getArrayByIndex(loop);
+            std::cout << "Index: " << loop << ", type: " << result.type << ", value: ";
+            outputData(result);
+            std::cout << std::endl;
+        }
     }else if (container->isObject()){
         std::string* key_lists = container->getListOfKeys();
         for (int loop=0;loop<container->getLength();loop++){

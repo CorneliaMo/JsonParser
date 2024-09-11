@@ -73,9 +73,9 @@ int JsonAnalyze::convertToData(std::string sep_json, Data &data){
         data.data = new int;
         is >> *(int*)(data.data);
         return OK;
-    }else if (json.find_first_of('.')==json.find_last_of('.')&&json.find('.')!=-1){
+    }else if (json.find('.')==json.rfind('.',json.length()-1)&&json.find('.')!=-1){
         int dot_pos = json.find('.');
-        if (isNumber(json.substr(0, dot_pos+1))&&isNumber(json.substr(dot_pos+1, json.length()-dot_pos))){
+        if (isNumber(json.substr(0, dot_pos))&&isNumber(json.substr(dot_pos+1, json.length()-dot_pos))){
             //is double
             #ifdef DEBUG
             std::cout << "Find double\n";
@@ -134,7 +134,7 @@ int JsonAnalyze::Analyze(std::string json){
     //通过循环解析每一个元素
     success = 0;
     if (json[0]=='{'||json[0]=='['){
-        int length = 0;
+        int length = 0, lengthB = 1;
 
         //calculate how many elements in this object or array
         int tmp_cal_length = 0;
@@ -147,6 +147,8 @@ int JsonAnalyze::Analyze(std::string json){
                 tmp_cal_length--;
             }else if (json[loop]==':'&&tmp_cal_length==0){
                 length++;
+            }else if (json[loop]==','&&tmp_cal_length==0){
+                lengthB++;
             }
             if (tmp_cal_length<0){
                 endPos = loop;
@@ -155,18 +157,19 @@ int JsonAnalyze::Analyze(std::string json){
         }
 
         #ifdef DEBUG
-        std::cout << "Find " << (json[0]=='{'? "object" : "array") << " which length is  " << length << std::endl; 
+        if (json[0]=='{') std::cout << "Find " << "object" << " which length is " << length << std::endl; 
+        else std::cout << "Find " << "array" << " which length is " << lengthB << std::endl;
         #endif
         
         //create a container for this object or array
         DataContainer* pContainer = new DataContainer();
-        pContainer->length = length;
         pContainer->type = json[0]=='{'? 'O':'A';
-        pContainer->values = new Data[length];
         datacontainerStack.push(pContainer);
         if (json[0]=='{'){
             //is an object
+            pContainer->length = length;
             pContainer->keys = new std::string[length];
+            pContainer->values = new Data[length];
             //add each element into the object
             int added = 0, nowIndex = 1;
             while(added<length&&nowIndex<endPos){
@@ -187,7 +190,7 @@ int JsonAnalyze::Analyze(std::string json){
                     delete tmpPtr;
                     //set new index
                     tmp_cal_length = 0;
-                    for (int loop=1;loop<json.length();loop++){
+                    for (int loop=nowIndex+1;loop<json.length();loop++){
                         //scan the number of object
                         if (json[loop]=='{'||json[loop]=='['){
                             tmp_cal_length++;
@@ -199,6 +202,8 @@ int JsonAnalyze::Analyze(std::string json){
                             break;
                         }
                     }
+                    while(json[nowIndex]!=','&&json[nowIndex]!='}') nowIndex++;
+                    nowIndex++;
                     added++;
                 }else{
                     //the value is int, double, string, bool or null
@@ -215,18 +220,52 @@ int JsonAnalyze::Analyze(std::string json){
             }//finish add object's elements
         }else{
             //is an array
+            pContainer->length = lengthB;
             pContainer->keys = NULL;
+            pContainer->values = new Data[lengthB];
             //add each element into container
             int added = 0, nowIndex = 1;
-            while(added<=length&&nowIndex<=endPos){
-                int value_end = nowIndex;
-                //search the end pos of the value
-                while(json[value_end]!=','&&json[value_end]!=']') value_end++;
-                int re = convertToData(json.substr(nowIndex,value_end-nowIndex+1), pContainer->values[added]);
-                if (re!=OK) return ERROR;
-                //set new index
-                nowIndex = value_end+1;
-                added++;
+            while(added<lengthB&&nowIndex<endPos){
+                if (json[nowIndex]=='{'||json[nowIndex]=='['){
+                    //if the value is an object or an array
+                    //analyze the object or array of the value
+                    Analyze(std::string(json, nowIndex));
+                    //put the analyzed element into container
+                    DataContainer** tmpPtr = NULL;
+                    int re = datacontainerStack.pop(tmpPtr);
+                    if (re!=OK||tmpPtr==NULL) return ERROR;
+                    pContainer->values[added].data = *tmpPtr;
+                    pContainer->values[added].type = json[nowIndex]=='{'? "object" : "array";
+                    delete tmpPtr;
+                    //set new index
+                    tmp_cal_length = 0;
+                    for (int loop=nowIndex+1;loop<json.length();loop++){
+                        //scan the number of object
+                        if (json[loop]=='{'||json[loop]=='['){
+                            tmp_cal_length++;
+                        }else if (json[loop]=='}'||json[loop]==']'){
+                            tmp_cal_length--;
+                        }
+                        if (tmp_cal_length<0){
+                            nowIndex = loop+1;
+                            break;
+                        }
+                    }
+                    while(json[nowIndex]!=','&&json[nowIndex]!='}') nowIndex++;
+                    nowIndex++;
+                    added++;
+                }else{
+                    //is common value
+                    int value_end = nowIndex;
+                    //search the end pos of the value
+                    while(json[value_end]!=','&&json[value_end]!=']') value_end++;
+                    value_end--;
+                    int re = convertToData(json.substr(nowIndex,value_end-nowIndex+1), pContainer->values[added]);
+                    if (re!=OK) return ERROR;
+                    //set new index
+                    nowIndex = value_end+2;
+                    added++;
+                }
             }
         }
     }else{
