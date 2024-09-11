@@ -23,7 +23,7 @@ int DataContainer::getLength(){
     return length;
 }
 
-Data DataContainer::getArrayByIndex(int i){
+Data DataContainer::getElementByIndex(int i){
     //Index start from 0
     if (!isArray()){
         return getNullData();
@@ -36,7 +36,20 @@ Data DataContainer::getArrayByIndex(int i){
     }
 }
 
-Data DataContainer::getObjectByKey(std::string key){
+Data DataContainer::operator[](int i){
+    //Index start from 0
+    if (!isArray()){
+        return getNullData();
+    }else{
+        if (i>=length){
+            return getNullData();
+        }else{
+            return values[i];
+        }
+    }
+}
+
+Data DataContainer::getElementByKey(std::string key){
     if (!isObject()){
         return getNullData();
     }else{
@@ -49,7 +62,20 @@ Data DataContainer::getObjectByKey(std::string key){
     }
 }
 
-std::string* DataContainer::getListOfKeys(){
+Data DataContainer::operator[](std::string key){
+    if (!isObject()){
+        return getNullData();
+    }else{
+        for (int loop=0;loop<length;loop++){
+            if (keys[loop]==key){
+                return values[loop];
+            }
+        }
+        return getNullData();
+    }
+}
+
+std::string* DataContainer::getListOfKey(){
     if (!isObject()){
         return NULL;
     }else{

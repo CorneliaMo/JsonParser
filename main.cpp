@@ -26,15 +26,15 @@ void outputDataContainer(DataContainer* container){
         //is array
         int length = container->getLength();
         for (int loop=0;loop<length;loop++){
-            Data result = container->getArrayByIndex(loop);
+            Data result = container->getElementByIndex(loop);
             std::cout << "Index: " << loop << ", type: " << result.type << ", value: ";
             outputData(result);
             std::cout << std::endl;
         }
     }else if (container->isObject()){
-        std::string* key_lists = container->getListOfKeys();
+        std::string* key_lists = container->getListOfKey();
         for (int loop=0;loop<container->getLength();loop++){
-            Data result = container->getObjectByKey(key_lists[loop]);
+            Data result = container->getElementByKey(key_lists[loop]);
             std::cout << "Key: " << key_lists[loop] << ", type: " << result.type << ", value: ";
             outputData(result);
             std::cout << std::endl;

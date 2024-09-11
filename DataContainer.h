@@ -26,10 +26,11 @@ class DataContainer {
         bool isObject();
         bool isArray();
         int getLength();
-        std::string* getListOfKeys();
-        Data getObjectByKey(std::string key);
-        Data getArrayByIndex(int i);
-
+        std::string* getListOfKey();
+        Data getElementByKey(std::string key);
+        Data getElementByIndex(int i);
+        Data operator[](std::string key);
+        Data operator[](int i);
 };
 
 #endif //DATASTORAGE_H
