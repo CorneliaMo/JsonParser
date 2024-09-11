@@ -14,7 +14,7 @@ std::string JsonAnalyze::getKey(std::string json, int i){
         index++;
     }
     #ifdef DEBUG
-    std::cout << "Find key is " << key << std::endl; 
+    std::cout << "Find key "" << key << ""\n"; 
     #endif
     return key;
 }
