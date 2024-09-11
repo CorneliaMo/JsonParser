@@ -28,7 +28,7 @@ e.g.
                                                 
 
         Data a = json[0];                       //Read using the index
-        Data a = json.getElementByIndex(0);
+        Data a = json.getElementByIndex(0);     //(Only if it's an array)
 
         int length = json.getLength();
         std::string* keys = json.getListOfKey();//Get the list of keys
