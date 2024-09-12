@@ -1,6 +1,7 @@
 #include <iostream>
 #include "JsonAnalyze.h"
 #include "status_code.h"
+#include <fstream>
 
 void outputData(Data &data){
     //Data can be int, double, true, false, string, null, object, array
@@ -42,6 +43,7 @@ void outputDataContainer(DataContainer* container){
     }
 }
 
+/*
 int main(){
     std::cout << "Tester for JsonParser by CorneliaMo\n";
     std::cout << "Input a json string :\n";
@@ -64,4 +66,21 @@ int main(){
         }
     }
     return 0;
+}
+*/
+
+int main(){
+    std::fstream fs("test.json");
+    std::string json = "";
+    std::string buffer = "";
+    while(std::getline(fs, buffer)){
+        json += buffer;
+        buffer.clear();
+    }
+    std::cout << "Get json string: " << json << std::endl;
+
+    JsonAnalyze analyzer;
+    analyzer.AnalyzeString(json);
+    DataContainer* json_data = analyzer.successAnalyze();
+    outputDataContainer((DataContainer*)((*json_data).getElementByKey("preference").data));
 }

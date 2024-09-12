@@ -1,0 +1,20 @@
+{
+    "name": "John Doe",
+    "age": 30,
+    "email": "johndoe@example.com",
+    "isActive": true,
+    "roles": ["admin", "user"],
+    "address": {
+        "street": "123 Main St",
+        "city": "Anytown",
+        "state": "CA",
+        "postalCode": "12345"
+    },
+    "preferences": {
+        "newsletter": true,
+        "notifications": {
+            "email": true,
+            "sms": false
+        }
+    }
+}

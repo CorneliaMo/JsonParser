@@ -164,7 +164,7 @@ int JsonAnalyze::Analyze(std::string json){
         
         //create a container for this object or array
         DataContainer* pContainer = new DataContainer();
-        pContainer->type = json[0]=='{'? 'O':'A';
+        pContainer->type = (json[0]=='{'? 'O':'A');
         datacontainerStack.push(pContainer);
         if (json[0]=='{'){
             //is an object
@@ -178,6 +178,7 @@ int JsonAnalyze::Analyze(std::string json){
                 //Search the pos of value
                 while(json[nowIndex]!=':') nowIndex++;
                 nowIndex++;
+                while(json[nowIndex]==' ') nowIndex++;
                 if (json[nowIndex]=='{'||json[nowIndex]=='['){
                     //if the value is an object or an array
                     //analyze the object or array of the value
@@ -205,6 +206,7 @@ int JsonAnalyze::Analyze(std::string json){
                     }
                     while(json[nowIndex]!=','&&json[nowIndex]!='}') nowIndex++;
                     nowIndex++;
+                    while(json[nowIndex]==' ') nowIndex++;
                     added++;
                 }else{
                     //the value is int, double, string, bool or null
@@ -216,6 +218,7 @@ int JsonAnalyze::Analyze(std::string json){
                     if (re!=OK) return ERROR;
                     //set new index
                     nowIndex = value_end+2;
+                    while(json[nowIndex]==' ') nowIndex++;
                     added++;
                 }
             }//finish add object's elements

@@ -1,7 +1,10 @@
 #include "DataContainer.h"
 
 DataContainer::DataContainer(){
-
+    keys = NULL;
+    values = NULL;
+    length = 0;
+    type = ' ';
 }
 
 Data DataContainer::getNullData(){
@@ -12,10 +15,12 @@ Data DataContainer::getNullData(){
 }
 
 bool DataContainer::isObject(){
+    if (this==NULL) return false;
     return (type=='O'? true : false);
 }
 
 bool DataContainer::isArray(){
+    if (this==NULL) return false;
     return (type=='A'? true : false);
 }
 

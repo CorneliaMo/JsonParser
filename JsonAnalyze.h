@@ -17,6 +17,7 @@ class JsonAnalyze{
         std::string clearSpace(std::string string);
         bool isNumber(std::string string);
         int Analyze(std::string json);
+        
     public:
         JsonAnalyze();
         int AnalyzeString(std::string json);
