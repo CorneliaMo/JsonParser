@@ -13,8 +13,9 @@ std::string JsonAnalyze::getKey(std::string json, int i){
         key += json[index];
         index++;
     }
+    if (key[0]==key[key.length()-1]&&key[0]=='"') key = key.substr(1, key.length()-2);
     #ifdef DEBUG
-    std::cout << "Find key \"" << key << "\"\n"; 
+    std::cout << "Find key \" " << key << " \"\n"; 
     #endif
     return key;
 }
