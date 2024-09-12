@@ -25,6 +25,7 @@ bool DataContainer::isArray(){
 }
 
 int DataContainer::getLength(){
+    if (this==NULL) return -1;
     return length;
 }
 
@@ -81,6 +82,7 @@ Data DataContainer::operator[](std::string key){
 }
 
 std::string* DataContainer::getListOfKey(){
+    if (this==NULL) return NULL;
     if (!isObject()){
         return NULL;
     }else{
